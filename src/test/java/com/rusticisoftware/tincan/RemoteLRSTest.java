@@ -35,6 +35,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.rusticisoftware.tincan.v10x.StatementsQuery;
+import org.joda.time.DateTime;
+import org.junit.Before;
 
 public class RemoteLRSTest {
     private static RemoteLRS lrs;
@@ -50,8 +52,8 @@ public class RemoteLRSTest {
 
     private static Properties config = new Properties();
 
-    @BeforeClass
-    public static void Init() throws Exception {
+	@BeforeClass
+	public static void init() throws Exception {
         lrs = new RemoteLRS(TCAPIVersion.V100);
 
         InputStream is = RemoteLRSTest.class.getResourceAsStream("/lrs.properties");
@@ -61,7 +63,10 @@ public class RemoteLRSTest {
         lrs.setEndpoint(config.getProperty("endpoint"));
         lrs.setUsername(config.getProperty("username"));
         lrs.setPassword(config.getProperty("password"));
-
+	}
+	
+    @Before
+    public void before() throws Exception {
         agent = new Agent();
         agent.setMbox("mailto:tincanjava@tincanapi.com");
 
@@ -212,8 +217,17 @@ public class RemoteLRSTest {
 
         StatementLRSResponse lrsRes = lrs.saveStatement(statement);
         Assert.assertTrue(lrsRes.getSuccess());
-        Assert.assertEquals(statement, lrsRes.getContent());
-        Assert.assertNotNull(lrsRes.getContent().getId());
+		Statement savedStatement = lrsRes.getContent();
+        Assert.assertEquals(statement, savedStatement);
+        Assert.assertNotNull(savedStatement.getId());
+		
+		StatementLRSResponse retrievedStatementResponse = lrs.retrieveStatement(savedStatement.getId().toString());
+		Statement retrievedStatement = retrievedStatementResponse.getContent();
+
+		Assert.assertNotNull(retrievedStatement);
+		Assert.assertNotNull(retrievedStatement.getStored());
+		Assert.assertNotNull(retrievedStatement.getRawStored());
+		Assert.assertEquals(retrievedStatement.getStored(), new DateTime(retrievedStatement.getRawStored()));
     }
 
     @Test
@@ -281,7 +295,7 @@ public class RemoteLRSTest {
         Assert.assertTrue(lrsRes.getSuccess());
         Assert.assertEquals(statement, lrsRes.getContent());
     }
-
+	
     @Test
     public void testSaveStatements() throws Exception {
         Statement statement1 = new Statement();
@@ -814,4 +828,30 @@ public class RemoteLRSTest {
         LRSResponse lrsRes = lrs.deleteAgentProfile(doc);
         Assert.assertTrue(lrsRes.getSuccess());
     }
+	
+	@Test
+	public void testOverrideOctetStream() throws Exception {		
+        AgentProfileDocument doc = new AgentProfileDocument();
+		doc.setContentType("application/octet-stream");
+        doc.setAgent(agent);
+        doc.setId("test");
+
+        LRSResponse clear = lrs.deleteAgentProfile(doc);
+        Assert.assertTrue(clear.getSuccess());
+		
+        doc.setContent("Test value 4".getBytes("UTF-8"));
+
+        LRSResponse save = lrs.saveAgentProfile(doc);
+        Assert.assertTrue(save.getSuccess());
+
+        AgentProfileLRSResponse retrieve = lrs.retrieveAgentProfile("test", agent);
+        Assert.assertTrue(retrieve.getSuccess());
+
+        doc.setEtag(retrieve.getContent().getEtag());		
+        doc.setId("test");
+        doc.setContent("Test value 5".getBytes("UTF-8"));
+
+        LRSResponse lrsResp = lrs.updateAgentProfile(doc);
+        Assert.assertTrue(lrsResp.getResponse().getContent(), lrsResp.getSuccess());
+	}
 }
