@@ -19,9 +19,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import com.rusticisoftware.tincan.internal.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import com.rusticisoftware.tincan.Agent;
 import com.rusticisoftware.tincan.QueryableStatementTarget;
@@ -66,7 +63,6 @@ public class StatementsQuery implements StatementsQueryInterface {
 
     public HashMap<String,String> toParameterMap() throws IOException {
         HashMap<String,String> params = new HashMap<String,String>();
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         if (this.getVerbID() != null) {
             params.put("verb", this.getVerbID().toString());
@@ -84,10 +80,10 @@ public class StatementsQuery implements StatementsQueryInterface {
             params.put("actor", this.getActor().toJSON(version));
         }
         if (this.getSince() != null) {
-            params.put("since", fmt.print(this.getSince().getJodaDateTime()));
+            params.put("since", this.getSince().toString());
         }
         if (this.getUntil() != null) {
-            params.put("until", fmt.print(this.getUntil().getJodaDateTime()));
+            params.put("until", this.getUntil().toString());
         }
         if (this.getLimit() != null) {
             params.put("limit", this.getLimit().toString());

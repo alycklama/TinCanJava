@@ -41,8 +41,7 @@ import com.rusticisoftware.tincan.json.StringOfJSON;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class Statement extends StatementBase {
-    private UUID id;
-    private DateTime stored;
+    private UUID id;    	
     private Agent authority;
     private TCAPIVersion version;
     
@@ -55,11 +54,6 @@ public class Statement extends StatementBase {
         JsonNode idNode = jsonNode.path("id");
         if (! idNode.isMissingNode()) {
             this.setId(UUID.fromString(idNode.textValue()));
-        }
-
-        JsonNode storedNode = jsonNode.path("stored");
-        if (! storedNode.isMissingNode()) {
-            this.setStored(new DateTime(storedNode.textValue()));
         }
 
         JsonNode authorityNode = jsonNode.path("authority");
@@ -93,13 +87,12 @@ public class Statement extends StatementBase {
     @Override
     public ObjectNode toJSONNode(TCAPIVersion version) {
         ObjectNode node = super.toJSONNode(version);
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         if (this.id != null) {
             node.put("id", this.getId().toString());
         }
         if (this.stored != null) {
-            node.put("stored", fmt.print(this.getStored().getJodaDateTime()));
+            node.put("stored", this.getStored().toString());
         }
         if (this.authority != null) {
             node.put("authority", this.getAuthority().toJSONNode(version));

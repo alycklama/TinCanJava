@@ -34,7 +34,8 @@ public class DateTime {
 		}
 	}
 
-	public String getDateTime() {
+	@Override
+	public String toString() {
 		if (hasZuluTime) {
 			return dateTime.getRawDateString() + "Z";
 		}
@@ -42,6 +43,6 @@ public class DateTime {
 	}
 	
 	public org.joda.time.DateTime getJodaDateTime() {
-		return new org.joda.time.DateTime(this.getDateTime());
+		return new org.joda.time.DateTime(this.toString());
 	}
 }

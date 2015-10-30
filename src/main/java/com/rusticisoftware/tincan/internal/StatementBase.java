@@ -20,15 +20,10 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import com.rusticisoftware.tincan.internal.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -53,7 +48,9 @@ public abstract class StatementBase extends JSONBase {
     private Context context;
     private com.rusticisoftware.tincan.internal.DateTime timestamp;
     private List<Attachment> attachments;
-    
+	protected DateTime stored;
+	protected String rawStored;
+
     @Deprecated
     private Boolean voided;
 
@@ -101,6 +98,12 @@ public abstract class StatementBase extends JSONBase {
         if (! timestampNode.isMissingNode()) {
             this.setTimestamp(new DateTime(timestampNode.textValue()));
         }
+		
+        JsonNode storedNode = jsonNode.path("stored");
+        if (! storedNode.isMissingNode()) {
+			this.rawStored = storedNode.textValue();
+            this.setStored(new DateTime(this.rawStored));
+        }
         
         JsonNode voidedNode = jsonNode.path("voided");
         if (! voidedNode.isMissingNode()) {
@@ -137,7 +140,6 @@ public abstract class StatementBase extends JSONBase {
     @Override
     public ObjectNode toJSONNode(TCAPIVersion version) {
         ObjectNode node = Mapper.getInstance().createObjectNode();
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         node.put("actor", this.getActor().toJSONNode(version));
         node.put("verb", this.getVerb().toJSONNode(version));
@@ -150,7 +152,7 @@ public abstract class StatementBase extends JSONBase {
             node.put("context", this.getContext().toJSONNode(version));
         }
         if (this.timestamp != null) {
-            node.put("timestamp", fmt.print(this.getTimestamp().getJodaDateTime()));
+            node.put("timestamp", this.getTimestamp().toString());
         }
         
         //Include 1.0.x specific fields if asking for 1.0.x version
