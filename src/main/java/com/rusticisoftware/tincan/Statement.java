@@ -34,8 +34,7 @@ import com.rusticisoftware.tincan.json.StringOfJSON;
  * Statement Class
  */
 public class Statement extends StatementBase {
-    private UUID id;
-    private DateTime stored;
+    private UUID id;    	
     private Agent authority;
     private TCAPIVersion version;
 
@@ -52,11 +51,6 @@ public class Statement extends StatementBase {
         JsonNode idNode = jsonNode.path("id");
         if (! idNode.isMissingNode()) {
             this.setId(UUID.fromString(idNode.textValue()));
-        }
-
-        JsonNode storedNode = jsonNode.path("stored");
-        if (! storedNode.isMissingNode()) {
-            this.setStored(new DateTime(storedNode.textValue()));
         }
 
         JsonNode authorityNode = jsonNode.path("authority");
@@ -137,14 +131,6 @@ public class Statement extends StatementBase {
 
 	public void setId(UUID id) {
 		this.id = id;
-	}
-
-	public DateTime getStored() {
-		return stored;
-	}
-
-	public void setStored(DateTime stored) {
-		this.stored = stored;
 	}
 
 	public Agent getAuthority() {

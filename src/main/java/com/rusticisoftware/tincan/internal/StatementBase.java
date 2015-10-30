@@ -46,6 +46,8 @@ public abstract class StatementBase extends JSONBase {
     private Context context;
     private DateTime timestamp;
     private List<Attachment> attachments;
+	private DateTime stored;
+	private String rawStored;
 
 	public StatementBase() {
 	}
@@ -95,6 +97,12 @@ public abstract class StatementBase extends JSONBase {
         JsonNode timestampNode = jsonNode.path("timestamp");
         if (! timestampNode.isMissingNode()) {
             this.setTimestamp(new DateTime(timestampNode.textValue()));
+        }
+		
+        JsonNode storedNode = jsonNode.path("stored");
+        if (! storedNode.isMissingNode()) {
+			this.rawStored = storedNode.textValue();
+            this.setStored(new DateTime(this.rawStored));
         }
         
         JsonNode voidedNode = jsonNode.path("voided");
@@ -208,6 +216,18 @@ public abstract class StatementBase extends JSONBase {
 
 	public void setTimestamp(DateTime timestamp) {
 		this.timestamp = timestamp;
+	}
+	
+	public DateTime getStored() {
+		return stored;
+	}
+	
+	public String getRawStored() {
+		return rawStored;
+	}
+
+	public void setStored(DateTime stored) {
+		this.stored = stored;
 	}
 
 	public List<Attachment> getAttachments() {
