@@ -15,10 +15,7 @@
 */
 package com.rusticisoftware.tincan.v095;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
+import com.rusticisoftware.tincan.internal.DateTime;
 
 import com.rusticisoftware.tincan.Agent;
 import com.rusticisoftware.tincan.QueryableStatementTarget;
@@ -37,7 +34,7 @@ import java.util.UUID;
  */
 public class StatementsQuery implements StatementsQueryInterface {
     private TCAPIVersion version = TCAPIVersion.V095;
-    
+
     private URI verbID;
     private QueryableStatementTarget object;
     private UUID registration;
@@ -53,7 +50,6 @@ public class StatementsQuery implements StatementsQueryInterface {
 
 	public StatementsQuery() {
 	}
-	
 
     public void setVerbID(String verbID) throws URISyntaxException {
 		this.setVerbID(new URI(verbID));
@@ -65,7 +61,6 @@ public class StatementsQuery implements StatementsQueryInterface {
 
     public HashMap<String,String> toParameterMap() throws IOException {
         HashMap<String,String> params = new HashMap<String,String>();
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         if (this.getVerbID() != null) {
             params.put("verb", this.getVerbID().toString());
@@ -83,10 +78,10 @@ public class StatementsQuery implements StatementsQueryInterface {
             params.put("actor", this.getActor().toJSON(getVersion()));
         }
         if (this.getSince() != null) {
-            params.put("since", fmt.print(this.getSince()));
+            params.put("since", this.getSince().toString());
         }
         if (this.getUntil() != null) {
-            params.put("until", fmt.print(this.getUntil()));
+            params.put("until", this.getUntil().toString());
         }
         if (this.getLimit() != null) {
             params.put("limit", this.getLimit().toString());

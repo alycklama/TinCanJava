@@ -20,11 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -44,13 +39,14 @@ public abstract class StatementBase extends JSONBase {
     private StatementTarget object;
     private Result result;
     private Context context;
-    private DateTime timestamp;
+    private com.rusticisoftware.tincan.internal.DateTime timestamp;
     private List<Attachment> attachments;
-	private DateTime stored;
-	private String rawStored;
+    protected DateTime stored;
+    protected String rawStored;
 
 	public StatementBase() {
 	}
+
     @Deprecated
     private Boolean voided;
 
@@ -98,18 +94,18 @@ public abstract class StatementBase extends JSONBase {
         if (! timestampNode.isMissingNode()) {
             this.setTimestamp(new DateTime(timestampNode.textValue()));
         }
-		
+
         JsonNode storedNode = jsonNode.path("stored");
         if (! storedNode.isMissingNode()) {
 			this.rawStored = storedNode.textValue();
             this.setStored(new DateTime(this.rawStored));
         }
-        
+
         JsonNode voidedNode = jsonNode.path("voided");
         if (! voidedNode.isMissingNode()) {
             this.setVoided(voidedNode.asBoolean());
         }
-        
+
         JsonNode attachmentsNode = jsonNode.path("attachments");
         if (! attachmentsNode.isMissingNode()) {
             this.attachments = new ArrayList<Attachment>();
@@ -140,7 +136,6 @@ public abstract class StatementBase extends JSONBase {
     @Override
     public ObjectNode toJSONNode(TCAPIVersion version) {
         ObjectNode node = Mapper.getInstance().createObjectNode();
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         node.put("actor", this.getActor().toJSONNode(version));
         node.put("verb", this.getVerb().toJSONNode(version));
@@ -153,9 +148,9 @@ public abstract class StatementBase extends JSONBase {
             node.put("context", this.getContext().toJSONNode(version));
         }
         if (this.getTimestamp() != null) {
-            node.put("timestamp", fmt.print(this.getTimestamp()));
+            node.put("timestamp", this.getTimestamp().toString());
         }
-        
+
         //Include 1.0.x specific fields if asking for 1.0.x version
         if (version.ordinal() <= TCAPIVersion.V100.ordinal()) {
             if (this.getAttachments() != null && this.getAttachments().size() > 0) {
@@ -166,7 +161,7 @@ public abstract class StatementBase extends JSONBase {
                 node.put("attachments", attachmentsNode);
             }
         }
-        
+
         return node;
     }
 
@@ -217,11 +212,11 @@ public abstract class StatementBase extends JSONBase {
 	public void setTimestamp(DateTime timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	public DateTime getStored() {
 		return stored;
 	}
-	
+
 	public String getRawStored() {
 		return rawStored;
 	}

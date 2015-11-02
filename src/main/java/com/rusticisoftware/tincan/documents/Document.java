@@ -15,7 +15,7 @@
 */
 package com.rusticisoftware.tincan.documents;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 
 public class Document {
     private String id;
@@ -26,7 +26,6 @@ public class Document {
 
 	public Document() {
 	}
-	
 
 	public String getId() {
 		return id;

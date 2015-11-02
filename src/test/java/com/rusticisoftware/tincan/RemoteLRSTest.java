@@ -35,7 +35,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.rusticisoftware.tincan.v10x.StatementsQuery;
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.junit.Before;
 
 public class RemoteLRSTest {
@@ -227,7 +227,7 @@ public class RemoteLRSTest {
 		Assert.assertNotNull(retrievedStatement);
 		Assert.assertNotNull(retrievedStatement.getStored());
 		Assert.assertNotNull(retrievedStatement.getRawStored());
-		Assert.assertEquals(retrievedStatement.getStored(), new DateTime(retrievedStatement.getRawStored()));
+		Assert.assertEquals(retrievedStatement.getStored().toString(), new DateTime(retrievedStatement.getRawStored()).toString());
     }
 
     @Test

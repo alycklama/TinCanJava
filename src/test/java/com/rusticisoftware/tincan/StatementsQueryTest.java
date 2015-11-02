@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.junit.Test;
 
 import com.rusticisoftware.tincan.v10x.StatementsQuery;
@@ -48,21 +48,21 @@ public class StatementsQueryTest {
         query.setSince(new DateTime());
         query.setUntil(new DateTime());
         query.setVerbID("http://example.com/verb");
-        
+
         //Rudimentary, but something...
         List<String> expected = new ArrayList<String>(
-                Arrays.asList(new String[]{ 
-                    "agent", "verb", "activity", "registration", 
+                Arrays.asList(new String[]{
+                    "agent", "verb", "activity", "registration",
                     "related_activities", "related_agents", "since",
                     "until", "limit", "format", "ascending"
                 }));
-        
+
         Map<String, String> paramMap = query.toParameterMap();
         for (String key : expected) {
             assertTrue(paramMap.containsKey(key));
         }
     }
-    
+
     public void v95SerializeDeserialize() throws Exception {
         com.rusticisoftware.tincan.v095.StatementsQuery query;
         query = new com.rusticisoftware.tincan.v095.StatementsQuery();
@@ -78,14 +78,14 @@ public class StatementsQueryTest {
         query.setSparse(true);
         query.setUntil(new DateTime());
         query.setVerbID("http://example.com/verb");
-        
+
         List<String> expected = new ArrayList<String>(
-                Arrays.asList(new String[]{ 
-                    "actor", "verb", "object", "registration", "context", 
-                    "since", "until", "limit", "authoritative", 
+                Arrays.asList(new String[]{
+                    "actor", "verb", "object", "registration", "context",
+                    "since", "until", "limit", "authoritative",
                     "sparse", "instructor", "ascending"
                 }));
-        
+
         Map<String, String> paramMap = query.toParameterMap();
         for (String key : expected) {
             assertTrue(paramMap.containsKey(key));

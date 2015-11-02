@@ -15,17 +15,12 @@
 */
 package com.rusticisoftware.tincan.v10x;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 import com.rusticisoftware.tincan.Agent;
 import com.rusticisoftware.tincan.QueryResultFormat;
-import com.rusticisoftware.tincan.QueryableStatementTarget;
 import com.rusticisoftware.tincan.StatementsQueryInterface;
 import com.rusticisoftware.tincan.TCAPIVersion;
 import com.rusticisoftware.tincan.Verb;
+import com.rusticisoftware.tincan.internal.DateTime;
 
 import java.io.IOException;
 import java.net.URI;
@@ -44,8 +39,8 @@ public class StatementsQuery implements StatementsQueryInterface {
     private UUID registration;
     private Boolean relatedActivities;
     private Boolean relatedAgents;
-    private DateTime since;
-    private DateTime until;
+    private com.rusticisoftware.tincan.internal.DateTime since;
+    private com.rusticisoftware.tincan.internal.DateTime until;
     private Integer limit;
     private QueryResultFormat format;
     //TODO: Expose when attachments are supported here
@@ -54,7 +49,6 @@ public class StatementsQuery implements StatementsQueryInterface {
 
 	public StatementsQuery() {
 	}
-	
 
     public void setVerbID(String verbID) throws URISyntaxException {
 		this.setVerbID(new URI(verbID));
@@ -66,7 +60,6 @@ public class StatementsQuery implements StatementsQueryInterface {
 
     public HashMap<String,String> toParameterMap() throws IOException {
         HashMap<String,String> params = new HashMap<String,String>();
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         if (this.getAgent() != null) {
             params.put("agent", this.getAgent().toJSON(getVersion()));
@@ -87,10 +80,10 @@ public class StatementsQuery implements StatementsQueryInterface {
             params.put("related_agents", this.getRelatedAgents().toString());
         }
         if (this.getSince() != null) {
-            params.put("since", fmt.print(this.getSince()));
+            params.put("since", this.getSince().toString());
         }
         if (this.getUntil() != null) {
-            params.put("until", fmt.print(this.getUntil()));
+            params.put("until", this.getUntil().toString());
         }
         if (this.getLimit() != null) {
             params.put("limit", this.getLimit().toString());

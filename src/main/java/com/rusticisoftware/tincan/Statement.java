@@ -18,12 +18,9 @@ package com.rusticisoftware.tincan;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
+import com.rusticisoftware.tincan.internal.DateTime;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -84,13 +81,12 @@ public class Statement extends StatementBase {
     @Override
     public ObjectNode toJSONNode(TCAPIVersion version) {
         ObjectNode node = super.toJSONNode(version);
-        DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
 
         if (this.getId() != null) {
             node.put("id", this.getId().toString());
         }
         if (this.getStored() != null) {
-            node.put("stored", fmt.print(this.getStored()));
+            node.put("stored", this.getStored().toString());
         }
         if (this.getAuthority() != null) {
             node.put("authority", this.getAuthority().toJSONNode(version));
