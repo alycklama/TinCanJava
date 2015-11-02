@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -42,9 +38,6 @@ import com.rusticisoftware.tincan.json.StringOfJSON;
 /**
  * StatementBase Class
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
 public abstract class StatementBase extends JSONBase {
     private Agent actor;
     private Verb verb;
@@ -53,7 +46,11 @@ public abstract class StatementBase extends JSONBase {
     private Context context;
     private DateTime timestamp;
     private List<Attachment> attachments;
-    
+	private DateTime stored;
+	private String rawStored;
+
+	public StatementBase() {
+	}
     @Deprecated
     private Boolean voided;
 
@@ -101,6 +98,12 @@ public abstract class StatementBase extends JSONBase {
         if (! timestampNode.isMissingNode()) {
             this.setTimestamp(new DateTime(timestampNode.textValue()));
         }
+		
+        JsonNode storedNode = jsonNode.path("stored");
+        if (! storedNode.isMissingNode()) {
+			this.rawStored = storedNode.textValue();
+            this.setStored(new DateTime(this.rawStored));
+        }
         
         JsonNode voidedNode = jsonNode.path("voided");
         if (! voidedNode.isMissingNode()) {
@@ -143,13 +146,13 @@ public abstract class StatementBase extends JSONBase {
         node.put("verb", this.getVerb().toJSONNode(version));
         node.put("object", this.getObject().toJSONNode(version));
 
-        if (this.result != null) {
+        if (this.getResult() != null) {
             node.put("result", this.getResult().toJSONNode(version));
         }
-        if (this.context != null) {
+        if (this.getContext() != null) {
             node.put("context", this.getContext().toJSONNode(version));
         }
-        if (this.timestamp != null) {
+        if (this.getTimestamp() != null) {
             node.put("timestamp", fmt.print(this.getTimestamp()));
         }
         
@@ -166,4 +169,80 @@ public abstract class StatementBase extends JSONBase {
         
         return node;
     }
+
+	public Agent getActor() {
+		return actor;
+	}
+
+	public void setActor(Agent actor) {
+		this.actor = actor;
+	}
+
+	public Verb getVerb() {
+		return verb;
+	}
+
+	public void setVerb(Verb verb) {
+		this.verb = verb;
+	}
+
+	public StatementTarget getObject() {
+		return object;
+	}
+
+	public void setObject(StatementTarget object) {
+		this.object = object;
+	}
+
+	public Result getResult() {
+		return result;
+	}
+
+	public void setResult(Result result) {
+		this.result = result;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	public DateTime getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(DateTime timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+	public DateTime getStored() {
+		return stored;
+	}
+	
+	public String getRawStored() {
+		return rawStored;
+	}
+
+	public void setStored(DateTime stored) {
+		this.stored = stored;
+	}
+
+	public List<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
+	}
+
+	public Boolean getVoided() {
+		return voided;
+	}
+
+	public void setVoided(Boolean voided) {
+		this.voided = voided;
+	}
 }
