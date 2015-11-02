@@ -18,7 +18,7 @@ package com.rusticisoftware.tincan.v095;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -84,10 +84,10 @@ public class StatementsQuery implements StatementsQueryInterface {
             params.put("actor", this.getActor().toJSON(version));
         }
         if (this.getSince() != null) {
-            params.put("since", fmt.print(this.getSince()));
+            params.put("since", fmt.print(this.getSince().getJodaDateTime()));
         }
         if (this.getUntil() != null) {
-            params.put("until", fmt.print(this.getUntil()));
+            params.put("until", fmt.print(this.getUntil().getJodaDateTime()));
         }
         if (this.getLimit() != null) {
             params.put("limit", this.getLimit().toString());

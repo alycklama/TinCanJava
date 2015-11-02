@@ -27,7 +27,7 @@ import java.util.UUID;
 
 import lombok.Data;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.junit.Test;
 
 import com.rusticisoftware.tincan.v10x.StatementsQuery;

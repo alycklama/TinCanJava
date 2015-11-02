@@ -18,7 +18,7 @@ package com.rusticisoftware.tincan.v10x;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -50,8 +50,8 @@ public class StatementsQuery implements StatementsQueryInterface {
     private UUID registration;
     private Boolean relatedActivities;
     private Boolean relatedAgents;
-    private DateTime since;
-    private DateTime until;
+    private com.rusticisoftware.tincan.internal.DateTime since;
+    private com.rusticisoftware.tincan.internal.DateTime until;
     private Integer limit;
     private QueryResultFormat format;
     //TODO: Expose when attachments are supported here
@@ -89,10 +89,10 @@ public class StatementsQuery implements StatementsQueryInterface {
             params.put("related_agents", this.getRelatedAgents().toString());
         }
         if (this.getSince() != null) {
-            params.put("since", fmt.print(this.getSince()));
+            params.put("since", fmt.print(this.getSince().getJodaDateTime()));
         }
         if (this.getUntil() != null) {
-            params.put("until", fmt.print(this.getUntil()));
+            params.put("until", fmt.print(this.getUntil().getJodaDateTime()));
         }
         if (this.getLimit() != null) {
             params.put("limit", this.getLimit().toString());

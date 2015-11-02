@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.junit.Test;
 
 /**

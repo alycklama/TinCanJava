@@ -17,7 +17,7 @@ package com.rusticisoftware.tincan.http;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -51,7 +51,7 @@ public class HTTPResponse {
         DateTimeFormatter RFC1123_DATE_TIME_FORMATTER =
                 DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC();
         try {
-            return DateTime.parse(this.getHeader("Last-Modified"), RFC1123_DATE_TIME_FORMATTER);
+            return new DateTime(org.joda.time.DateTime.parse(this.getHeader("Last-Modified"), RFC1123_DATE_TIME_FORMATTER).toString());
         }
         catch (Exception parseException) {
             return null;

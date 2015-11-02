@@ -23,7 +23,7 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 
 /**
  * State Class

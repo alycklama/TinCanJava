@@ -18,7 +18,7 @@ package com.rusticisoftware.tincan.documents;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

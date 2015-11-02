@@ -25,7 +25,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -99,7 +99,7 @@ public class Statement extends StatementBase {
             node.put("id", this.getId().toString());
         }
         if (this.stored != null) {
-            node.put("stored", fmt.print(this.getStored()));
+            node.put("stored", fmt.print(this.getStored().getJodaDateTime()));
         }
         if (this.authority != null) {
             node.put("authority", this.getAuthority().toJSONNode(version));

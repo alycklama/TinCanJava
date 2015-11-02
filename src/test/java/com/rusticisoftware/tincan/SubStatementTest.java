@@ -19,7 +19,7 @@ import static com.rusticisoftware.tincan.TestUtils.assertSerializeDeserialize;
 import static com.rusticisoftware.tincan.TestUtils.getAgent;
 import lombok.Data;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.junit.Test;
 
 /**

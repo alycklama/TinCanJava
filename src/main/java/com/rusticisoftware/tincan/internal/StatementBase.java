@@ -26,7 +26,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.joda.time.DateTime;
+import com.rusticisoftware.tincan.internal.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -51,7 +51,7 @@ public abstract class StatementBase extends JSONBase {
     private StatementTarget object;
     private Result result;
     private Context context;
-    private DateTime timestamp;
+    private com.rusticisoftware.tincan.internal.DateTime timestamp;
     private List<Attachment> attachments;
     
     @Deprecated
@@ -150,7 +150,7 @@ public abstract class StatementBase extends JSONBase {
             node.put("context", this.getContext().toJSONNode(version));
         }
         if (this.timestamp != null) {
-            node.put("timestamp", fmt.print(this.getTimestamp()));
+            node.put("timestamp", fmt.print(this.getTimestamp().getJodaDateTime()));
         }
         
         //Include 1.0.x specific fields if asking for 1.0.x version
