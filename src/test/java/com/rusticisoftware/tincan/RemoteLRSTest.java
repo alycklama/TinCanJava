@@ -828,30 +828,4 @@ public class RemoteLRSTest {
         LRSResponse lrsRes = lrs.deleteAgentProfile(doc);
         Assert.assertTrue(lrsRes.getSuccess());
     }
-	
-	@Test
-	public void testOverrideOctetStream() throws Exception {		
-        AgentProfileDocument doc = new AgentProfileDocument();
-		doc.setContentType("application/octet-stream");
-        doc.setAgent(agent);
-        doc.setId("test");
-
-        LRSResponse clear = lrs.deleteAgentProfile(doc);
-        Assert.assertTrue(clear.getSuccess());
-		
-        doc.setContent("Test value 4".getBytes("UTF-8"));
-
-        LRSResponse save = lrs.saveAgentProfile(doc);
-        Assert.assertTrue(save.getSuccess());
-
-        AgentProfileLRSResponse retrieve = lrs.retrieveAgentProfile("test", agent);
-        Assert.assertTrue(retrieve.getSuccess());
-
-        doc.setEtag(retrieve.getContent().getEtag());		
-        doc.setId("test");
-        doc.setContent("Test value 5".getBytes("UTF-8"));
-
-        LRSResponse lrsResp = lrs.updateAgentProfile(doc);
-        Assert.assertTrue(lrsResp.getResponse().getContent(), lrsResp.getSuccess());
-	}
 }
